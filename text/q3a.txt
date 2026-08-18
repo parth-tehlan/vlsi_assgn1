@@ -1,0 +1,14 @@
+Circuit: nmos_body_effect_+0.9
+
+Doing analysis at TEMP = 27.000000 and TNOM = 27.000000
+
+Using SPARSE 1.3 as Direct Linear Solver
+
+No. of Data Rows : 181
+vgs_at_gm_max       =  6.50000e-01 with=  2.89575e-05
+ids_at_gm_max       =  -4.59906e-03
+gm_max = 2.895752e-05
+vgs_at_gm_max = 6.500000e-01
+ids_at_gm_max = -4.59906e-03
+
+Vt extrapolates to +159.5V which is obviously an incorrect measurement. this is because of the body-source and body-drain pn junctions are now sufficiently forward biased and thus the extrapolation method no longer holds valid, as the Id measurement is now contaminated with the forward bias current of those junctions as well.

@@ -1,0 +1,26 @@
+nmos_plot
+.include TSMC_180nm.txt
+.param SUPPLY=1.8
+.param LAMBDA=0.09u
+
+.param width_N=0.24u
+
+M1 nd ng gnd gnd CMOSN W={width_N} L={2*LAMBDA}
++ AS={5*width_N*LAMBDA}
++ PS={10*LAMBDA+2*width_N}
++ AD={5*width_N*LAMBDA}
++ PD={10*LAMBDA+2*width_N}
+
+Vds nd gnd {SUPPLY}
+Vgs ng gnd {SUPPLY}
+
+.dc Vds 0 1.8 0.01 Vgs 0 1.8 0.3
+
+.control
+run
+.plot -i(Vds) vs Vds
+set hcopypscolor = 1 $ White background
+hardcopy ques1_b.eps -Vds#branch
+.endc
+
+.end

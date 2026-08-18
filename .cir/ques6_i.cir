@@ -1,0 +1,17 @@
+switch
+.include TSMC_180nm.txt
+.param LAMBDA = 0.09u
+.param L_n = 2*LAMBDA
+.param width_N = 20*LAMBDA
+.param SUPPLY = 1.8
+
+M1 out in gnd gnd CMOSN L={L_n} W={width_N}
++ AS={5*width_N*LAMBDA}
++ PS={10*LAMBDA+2*width_N}
++ AD={5*width_N*LAMBDA}
++ PD={10*LAMBDA+2*width_N}
+
+.ic(out)=0
+Vin in gnd {SUPPLY}
+
+.tran 

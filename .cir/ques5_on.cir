@@ -1,0 +1,27 @@
+peak_Ion
+.include TSMC_180nm.txt
+.param SUPPLY=1.8
+.param LAMBDA = 0.09u
+.param L_n={2*LAMBDA}
+.param width_N=36u
+
+M1 nd ng gnd gnd CMOSN W={width_N} L={L_n}
++ AS={5*width_N*LAMBDA}
++ PS={10*LAMBDA+2*width_N}
++ AD={5*width_N*LAMBDA}
++ PD={10*LAMBDA+2*width_N}
+
+Vgs ng gnd {SUPPLY}
+Vds nd gnd {SUPPLY}
+.dc Vds 0 1.8 10m
+
+.control
+run
+let Id = -i(Vds)
+plot Id vs v(nd)
+set hcopypscolor=1
+hardcopy q5_on_36.eps Id vs v(nd)
+let Ion_max = vecmax(Id)
+print Ion_max
+.endc
+.end

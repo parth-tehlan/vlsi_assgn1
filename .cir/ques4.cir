@@ -1,0 +1,43 @@
+series_nmos
+.include TSMC_180nm.txt
+.param LAMBDA=0.09u
+.param width_N={20*LAMBDA}
+.param L_n={2*LAMBDA}
+.param SUPPLY=1.8
+
+.subckt nmos d g s b W={W} L={L}
+
+M1 d g s b CMOSN W={W} L={L}
++ AS={5*W*LAMBDA}
++ PS={10*LAMBDA+2*W}
++ AD={5*W*LAMBDA}
++ PD={10*LAMBDA+2*W}
+
+.ends nmos
+
+Xnmos1 nd1 ng1 ns gnd nmos W={width_N} L={L_n}
+Xnmos2 ns ng1 gnd gnd nmos W={width_N} L={L_n}
+Vgs1 ng1 gnd {SUPPLY}
+Vds1 nd1 gnd {SUPPLY}
+
+Xnmos3 nd2 ng2 gnd gnd nmos W={width_N} L={2*L_n}
+Vgs2 ng2 gnd {SUPPLY}
+Vds2 nd2 gnd {SUPPLY}
+
+.control
+dc Vds1 0 1.8 10m
+let Id_series = -i(Vds1)
+let Vds_series = v(nd1)
+plot Id_series vs Vds_series
+set hcopypscolor=1
+hardcopy q4_Id_vs_Vds_series.eps Id_series vs Vds_series
+
+dc Vds2 0 1.8 10m
+let Id_single = -i(Vds2)
+let Vds_single = v(nd2)
+set hcopypscolor=1
+plot Id_single vs Vds_single
+hardcopy q4a_Id_vs_Vds_single.eps Id_single vs Vds_single
+
+.endc
+.end

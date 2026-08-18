@@ -1,0 +1,35 @@
+nmos_body_effect_+0.9
+.include TSMC_180nm.txt
+.param supply=1.8
+.param LAMBDA=0.09u
+.param L_n=2*LAMBDA
+.param width_N = 20*LAMBDA
+
+M1 nd ng gnd nb CMOSN W={width_N} L={L_n}
++ AS={5*width_N*LAMBDA}
++ PS={10*LAMBDA+2*width_N}
++ AD={5*width_N*LAMBDA}
++ PD={10*LAMBDA+2*width_N}
+
+Vds nd gnd 50m
+Vbs nb gnd 0.9
+Vgs ng gnd {supply}
+.dc Vgs 0 1.8 10m
+
+.control
+run
+let Id=-i(Vds)
+let gm=deriv(Id)
+plot Id vs v(ng)
+plot gm vs v(ng)
+let gm_max = vecmax(gm) 
+meas dc VGS_at_gm_max MAX_AT gm
+meas dc IDS_at_gm_max FIND Id WHEN v-sweep=VGS_at_gm_max
+print gm_max
+print VGS_at_gm_max
+print IDS_at_gm_max
+set hcopypscolor=1
+hardcopy Id_vs_Vgs.eps Id vs v(ng)
+hardcopy gm_vs_Vgs.eps gm vs v(ng)
+.endc
+.end

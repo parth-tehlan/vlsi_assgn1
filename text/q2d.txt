@@ -1,0 +1,7 @@
+vgs_at_gm_max = 7.10000e-01 with= 1.58234e-04 
+ids_at_gm_max = 2.51051e-05 
+gm_max = 1.582338e-04 
+vgs_at_gm_max = 7.100000e-01 
+ids_at_gm_max = 2.510505e-05 
+Vt ~= 0.5513V
+using equation gm = mu*Cox*W/L*Vds, find mu*Cox to be 316.5 muA/V^s
