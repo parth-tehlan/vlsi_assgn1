@@ -1,0 +1,38 @@
+c-v extraction
+*setting all non-gate terminals to gnd and then using 
+*C = i/(dv/dt) to estimate C for all respective terminals
+.include TSMC_180nm.txt
+
+.param LAMBDA=0.18u
+.param len=2*LAMBDA
+.param width_N=20*LAMBDA
+.param SUPPLY=1.8
+
+Vd nd gnd 0
+Vs ns gnd 0
+Vb nb gnd 0
+
+M1 nd ng ns nb CMOSN W={width_N} L=len
++ AS={5*width_N*LAMBDA} PS={10*LAMBDA+2*width_N}
++ AD={5*width_N*LAMBDA} PD={10*LAMBDA+2*width_N}
+
+Vg ng 0 PWL(0 -1.8 1u 1.8)
+
+.tran 1n 1u
+
+.control
+run
+*dv/dt = ((1.8) - (-1.8))/1us
+let dv_dt = 3.6e6
+let Cgg = -I(Vg) / dv_dt
+  
+let Cgs = I(Vs) / dv_dt
+let Cgd = I(Vd) / dv_dt
+let Cgb = I(Vb) / dv_dt
+  
+set color0=white
+set color1=black
+plot Cgg vs v(g) title 'Total Gate Capacitance Cgg'
+plot Cgs Cgd Cgb vs v(g) title 'Parasitic Capacitances'
+.endc
+.end

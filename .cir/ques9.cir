@@ -1,0 +1,42 @@
+series_inverters
+
+.include TSMC_180nm.txt
+
+.param LAMBDA=0.18u
+.param len=0.18u
+.param width_N=9u
+.param width_P=2.5*width_N
+.param SUPPLY=1.8
+.param C_Load=500f
+
+.subckt cmos_inv in out vdd gnd
+Mp out in vdd vdd CMOSP L={len} W={width_P}
++ AS={5*width_P*LAMBDA} PS={10*LAMBDA+2*width_P}
++ AD={5*width_P*LAMBDA} PD={10*LAMBDA+2*width_P}
+Mn out in gnd gnd CMOSN L={len} W={width_N}
++ AS={5*width_N*LAMBDA} PS={10*LAMBDA+2*width_N}
++ AD={5*width_N*LAMBDA} PD={10*LAMBDA+2*width_N}
+.ends cmos_inv
+
+Vin a gnd pulse(0 1.8 0ns 100ps 100ps 9.9ns 20ns)
+Vdd vdd gnd {SUPPLY}
+
+Xinva a b vdd gnd cmos_inv
+Xinvb b c vdd gnd cmos_inv
+
+Cl c gnd {C_Load}
+
+.tran 1p 20n uic
+
+.meas tran tpLH trig v(a) val=0.9 rise=1 targ v(c) val=0.9 rise=1
+.meas tran tpHL trig v(a) val=0.9 fall=1 targ v(c) val=0.9 fall=1
+.meas tran tpd param='(tpHL+tpLH)/2'
+
+.control
+run
+set color0=white
+set color1=black
+plot  v(c)
+.endc
+
+.end

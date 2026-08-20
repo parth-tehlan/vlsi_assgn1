@@ -18,7 +18,7 @@ Vgs ng gnd {SUPPLY}
 
 .control
 run
-.plot -i(Vds) vs Vds
+plot -i(Vds) vs v(nd)
 set hcopypscolor = 1 $ White background
 hardcopy ques1_b.eps -Vds#branch
 .endc
